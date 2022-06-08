@@ -1,0 +1,58 @@
+//alert('Works!!!');
+
+//require('./styles/styles.css');
+
+import './styles/styles.css'
+import BookService from './services/BookService';
+import UI from './UI';
+
+document.addEventListener('DOMContentLoaded', () => { 
+    const ui = new UI();
+    ui.renderBooks();
+});
+
+document.getElementById('book-form')
+    .addEventListener('submit', e =>{
+        const title = document.getElementById('title').value;
+        const author = document.getElementById('author').value;
+        const isbn = document.getElementById('isbn').value;
+        const image = document.getElementById('image').files;
+
+        console.log(image);
+
+        if (image.length !== 0 & title.length !== 0 & author.length !== 0 & isbn.length !== 0) {
+       
+
+            const formData = new FormData();
+            formData.append('image', image[0]);
+            formData.append('title', title);
+            formData.append('author', author);
+            formData.append('isbn', isbn);
+            
+            const ui = new UI();
+            ui.addNewBook(formData);
+
+            ui.renderMessage('New Book Added', 'success', '3000')
+            
+            e.preventDefault();
+        }else{
+            const ui = new UI();
+            ui.renderMessage('Must Complete all fields', 'danger', '5000');
+            
+
+        }
+
+    } );
+
+document.getElementById('book-cards')
+    .addEventListener('click', (e) => {
+        if (e.target.classList.contains("delete")) {
+            const  ui = new UI()
+            ui.deleteBook(e.target.getAttribute('_id'));
+            ui.renderMessage('Book Removed', 'danger', '2000');
+        };
+
+        
+
+        e.preventDefault();
+    });
